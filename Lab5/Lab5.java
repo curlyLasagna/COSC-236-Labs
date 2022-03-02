@@ -57,7 +57,7 @@ public class Lab5 {
       }
 
     } while (run);
-
+    in.close();
   }
 
   /** */
@@ -73,8 +73,12 @@ public class Lab5 {
 
   }
 
+  /**
+   * Inputs test scores repeatedly until the user stops
+   * Print the total count of letter grades and average score
+   * */
   static void problem2() {
-
+    System.out.println("Enter test scores. ");
 
   }
 
@@ -86,7 +90,45 @@ public class Lab5 {
    *  2 -> 20. Evens only
    */
   static void problem3() {
+    // For loop
+    for(int x = 0;x <= 10; x++)
+      System.out.println(x);
 
+    for(int x = 10;x > 0; x--)
+      System.out.println(x);
+
+    for(int x = 2;x <= 20; x++)
+      if(x % 2 == 0)
+        System.out.println(x);
+
+    // do-while loop
+    int x = 0;
+    do {
+      System.out.println(x);
+    } while(x++ < 10);
+
+    do {
+      x = 10;
+      System.out.println(x);
+    } while(x-- > 0);
+
+    do {
+      x = 2;
+      if(x % 2 == 0)
+        System.out.println(x);
+    } while(x++ < 0);
+
+    // While loop
+    while(x < 10) 
+      System.out.println(x++);
+
+    while(x > 10) 
+      System.out.println(x--);
+
+    while(x < 20) 
+      if (x % 2 == 0)
+        System.out.println(x++);
+    
   }
 
   /**
@@ -96,6 +138,11 @@ public class Lab5 {
    */
   static void problem4() {
     Random rand = new Random();
+    String [] destination = new String[5];
+    System.out.println("Enter 5 destinations");
+    for(int x = 0; x < 5; x++) {
+      destination[x] = in.next();   
+    }
   }
 
   /** 
@@ -119,7 +166,8 @@ public class Lab5 {
    * @return char Capitalized letter grade
    */
   static char returnLetterGrade(int grade) {
-    char letterGrade = 'A';
+
+    char letterGrade = 'F';
     if(grade < 60 && grade > 70)
       letterGrade = 'D';
     else if (grade < 70 && grade > 80)
