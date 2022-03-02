@@ -9,7 +9,7 @@ import java.util.*;
 public class Lab5 {
   static Scanner in = new Scanner(System.in);
 
-  static void main(String[] args) {
+  public static void main(String[] args) {
 
     boolean run = true;
     do {
@@ -91,15 +91,24 @@ public class Lab5 {
    */
   static void problem3() {
     // For loop
+    System.out.println("For loop from 1 -> 10");
     for(int x = 0;x <= 10; x++)
       System.out.println(x);
 
+    System.out.println("");
+
+    System.out.println("For loop from 10 -> 1");
     for(int x = 10;x > 0; x--)
       System.out.println(x);
 
+    System.out.println("");
+
+    System.out.println("For loop from 2 -> 20. Even number only");
     for(int x = 2;x <= 20; x++)
       if(x % 2 == 0)
         System.out.println(x);
+
+    System.out.println("");
 
     // do-while loop
     int x = 0;
@@ -116,18 +125,18 @@ public class Lab5 {
       x = 2;
       if(x % 2 == 0)
         System.out.println(x);
-    } while(x++ < 0);
+    } while(x++ < 20);
 
-    // While loop
-    while(x < 10) 
-      System.out.println(x++);
+    // // While loop
+    // while(x < 10) 
+    //   System.out.println(x++);
 
-    while(x > 10) 
-      System.out.println(x--);
+    // while(x > 10) 
+    //   System.out.println(x--);
 
-    while(x < 20) 
-      if (x % 2 == 0)
-        System.out.println(x++);
+    // while(x < 20) 
+    //   if (x % 2 == 0)
+    //     System.out.println(x++);
     
   }
 
