@@ -1,6 +1,6 @@
 /**
  * <h1>Lab 5: Arrays</h1>
- * 
+ * This lab implements different loops to be used for arrays 
  * @author Luis & Abdalla
  * 
  */
@@ -9,7 +9,7 @@ import java.util.*;
 public class Lab5 {
   static Scanner in = new Scanner(System.in);
 
-  public static void main(String[] args) {
+  static void main(String[] args) {
 
     boolean run = true;
     do {
@@ -78,12 +78,24 @@ public class Lab5 {
 
   }
 
+  /**
+   * Use "while", "do-while", & "for" loops
+   * print 
+   *  1 -> 10
+   *  10 -> 1
+   *  2 -> 20. Evens only
+   */
   static void problem3() {
 
   }
 
+  /**
+   * This program prompts the user for 5 destinations
+   * Store destination in an array
+   * Print 3 unique random destinations
+   */
   static void problem4() {
-
+    Random rand = new Random();
   }
 
   /** 
@@ -97,17 +109,27 @@ public class Lab5 {
       menu += Integer.toString(x + 1) + ". " + progNames[x] + '\n';
 
     return "Choose a program to run\n" +
-        menu +
-        "0. Exit";
+           menu +
+           "0. Exit";
   }
 
   /**
-   *  
+   * Returns a character based on the grade value   
    * @param grade Numerical grade
    * @return char Capitalized letter grade
    */
   static char returnLetterGrade(int grade) {
-    return 'A';
+    char letterGrade = 'A';
+    if(grade < 60 && grade > 70)
+      letterGrade = 'D';
+    else if (grade < 70 && grade > 80)
+      letterGrade = 'C';
+    else if (grade < 90 && grade > 80)
+      letterGrade = 'B';
+    else if (grade > 90)
+      letterGrade = 'A';
+
+    return letterGrade;
   }
 
 }
