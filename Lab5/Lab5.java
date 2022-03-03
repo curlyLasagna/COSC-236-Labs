@@ -79,8 +79,8 @@ public class Lab5 {
     boolean run = true;
     double tempAvg = 0;
 
+    System.out.println("Input temperatures. Input any character to stop");
     do {
-      System.out.println("Input temperatures. Input any character to stop");
       if (in.hasNextInt()) {
         temperature = in.nextInt();
         tempSum += temperature;
@@ -88,11 +88,13 @@ public class Lab5 {
           aboveFreezingCount++;
         else 
           belowFreezingCount++;
-      } else 
+      } else {
         run = false;
+        in.nextLine();
+      }
     } while (run);
     tempAvg = tempSum/(aboveFreezingCount + belowFreezingCount);
-    System.out.println("Average temperature: " + tempAvg);
+    System.out.println("\nAverage temperature: " + tempAvg + "˚C");
     in.nextLine();
   }
 
@@ -118,8 +120,8 @@ public class Lab5 {
 
     Arrays.fill(letterGradeCount, 0);
 
+    System.out.println("Input test scores. Input any character to stop");
     do {
-      System.out.println("Input test scores. Input any character to stop");
 
       if (in.hasNextInt()) {
         testScore = in.nextInt();
@@ -146,8 +148,10 @@ public class Lab5 {
           letterGradeCount[letterGradeCount.length - 5]++;
         }  
 
-        else
+        else {
           run = false;
+          in.nextLine();
+        }
       } while (run);
 
         int totalGradeCount = 0;
@@ -241,6 +245,7 @@ public class Lab5 {
    * Print 3 unique random destinations out of the 5 entered
    */
   static void problem4() {
+    in.nextLine();
     final int MAX_DESTINATION = 5;
     // Use Random class to return a random number
     Random rand = new Random();
@@ -253,11 +258,13 @@ public class Lab5 {
     Arrays.fill(visited, false);
 
     // Input destinations
-    for (int x = 0; x < 5; x++) 
-      destination[x] = in.nextLine();
+    // BUG: Reads '\n' into the string so it fills an array index with just '\n'
+    for (int x = 0; x < 5; x++)  {
+      destination[x] = in.next();
+    }
 
     // Output
-    System.out.println("Your 3 random destinations");
+    System.out.println("\nYour 3 random destinations");
     int randIndex = rand.nextInt(destination.length);
     int index = 0;
     while(index < 3) {
