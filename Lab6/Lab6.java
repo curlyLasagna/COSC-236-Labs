@@ -9,7 +9,7 @@ public class Lab6 {
 
       // List of program names to choose from
       final String[] progNames = {
-        "Calcultor",
+        "Calculator",
         "Print 2D array",
         "Traverse board"
       };
@@ -47,24 +47,47 @@ public class Lab6 {
   }
 
   static void problem1() {
+    in.nextLine();
     boolean run = true;
-    System.out.println(
-    """
-    This calculator takes simple calculations from a user 
-    """
-        );
-
+    System.out.println("This calculator takes simple calculations from a user");
+    System.out.println("Enter any character to quit");
     do {
-      in.nextLine();
+      String computation = "";
+      computation = in.nextLine();
+      Double.parseDouble(computation);
     } while(run);
   }
 
+  
   static void problem2() {
-
+    System.out.println("This is where problem 2 starts");
+    
+    for (int i=1; i<6; i++){
+      for (int k=i; k<=i+4; k++){
+        System.out.print(k + " ");
+      }
+      System.out.println("");
+    }
   }
 
   static void problem3() {
+    char [][] board = new char [9][9];
+    char pos = 254;
+    // Fill board with dashes
+    // Arrays.stream(board).forEach(a -> Arrays.fill(a, "-"));
+    for(int x = 0;x < 9; x++) 
+      for(int y = 0; y < 9; y++) 
+        board[x][y] = '-';
+      
+    // for (char [] row: board)
+    //     Arrays.fill(row, 'F');
 
+    for(int x = 0;x < 9; x++) {
+      for(int y = 0; y < 9; y++) {
+        System.out.print(board[x][y] + ' ');
+      }
+      System.out.println("");
+    }
   }
   /**
    * Generates a string menu based on the number of programs to choose from.
