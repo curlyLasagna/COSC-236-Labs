@@ -54,10 +54,8 @@ public class Lab6 {
     do {
       String computation = "";
       computation = in.nextLine();
-      Double.parseDouble(computation);
     } while(run);
   }
-
   
   static void problem2() {
     System.out.println("This is where problem 2 starts");
@@ -71,23 +69,51 @@ public class Lab6 {
   }
 
   static void problem3() {
-    char [][] board = new char [9][9];
+    final int
+      ROW_SIZE = 9,
+      COL_SIZE = 9;
+    
+    boolean quit = false;
+    char [][] board = new char [ROW_SIZE][COL_SIZE];
     char pos = 254;
     // Fill board with dashes
-    // Arrays.stream(board).forEach(a -> Arrays.fill(a, "-"));
-    for(int x = 0;x < 9; x++) 
-      for(int y = 0; y < 9; y++) 
-        board[x][y] = '-';
+    Arrays.stream(board).forEach(a -> Arrays.fill(a, '-'));
       
-    // for (char [] row: board)
-    //     Arrays.fill(row, 'F');
-
     for(int x = 0;x < 9; x++) {
       for(int y = 0; y < 9; y++) {
         System.out.print(board[x][y] + ' ');
       }
       System.out.println("");
     }
+
+   while (!quit) {
+     char input = ' ';
+     
+     System.out.println("Which direction would you like to move? (N S E W) Type 'quit' to quit");
+     input = in.next().charAt(0);
+     Character.toUpperCase(input);
+     
+     switch (input){
+       case 'N': 
+         // Wrap to bottom
+         if (pos < 0)
+           pos = ROW_SIZE - 1;
+         else if (pos == ROW_SIZE || pos > ROW_SIZE)
+           pos = 0;
+         
+         board[-1][1];
+         break;
+       case 'S':
+         board[+1][];
+         break;
+       case 'E':
+         board[][+1];
+         break;
+       case 'W':
+         board[][-1];
+         break;
+       }
+     }
   }
   /**
    * Generates a string menu based on the number of programs to choose from.
@@ -106,5 +132,27 @@ public class Lab6 {
       menu +
       "0. Exit";
   }
+  
+  public static int wrapRows(int pos) {
+      //Wraps from Top Edge to Bottom Edge
+      if(pos < 0) 
+        return MAX_ROWS-1;
+      //Wraps from Bottom Edge to Top Edge
+      else if(pos == MAX_ROWS || pos > MAX_ROWS) {
+        return 0;
+          }
+      else
+        return pos;
+  }
+  
+  public static int wrapCols(int pos) {
+      if(pos < 0)
+        return MAX_COLS-1;
+        //Wraps from Left Edge to Right Edge
+      else if(pos == MAX_COLS || pos > MAX_COLS)
+        return 0;
+        //Wraps from Right Edge to Left Edge
+      else
+        return pos;
+  }
 }
-
