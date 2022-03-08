@@ -2,10 +2,9 @@ import java.util.*;
 
 public class Lab6 {
   static Scanner in = new Scanner(System.in);
-
-  public static void main(String[] args) {
+  static int badInputCount = 0;
+  public static void main(String[] args) throws InterruptedException {
     boolean run = true;
-    int badInputCount = 0;
     do {
       int choice = 0;
 
@@ -16,12 +15,8 @@ public class Lab6 {
           "Traverse board"
       };
 
-      if(badInputCount > 2) {
-        System.out.println("\n\nSTOP IT! (ノಠ益ಠ)ノ彡┻━┻ \n\n");
-        badInputCount = 0;
-      }
-
       System.out.println(getMenu(progNames));
+      System.out.print("> ");
 
       if (in.hasNextInt()) {
         choice = in.nextInt();
@@ -41,13 +36,13 @@ public class Lab6 {
             break;
           default:
             System.err.println("Option does not exist. Try again");
-            badInputCount++;
+            badUser();
             in.nextLine();
             break;
         }
       } else {
         System.err.println("Invalid option. Try again");
-        badInputCount++;
+        badUser();
         in.nextLine();
       }
 
@@ -56,52 +51,51 @@ public class Lab6 {
     in.close();
   }
 
-  static void problem1() {
-    // Probably a little over engineered. Didn't see the tip until I finished this up
+  /**
+   * Problem 1. Calculator
+   * @author Luis
+   * Inputs a space separated math expression
+   * Arithmetic operations and 2 values only 
+   * */
+  static void problem1() throws InterruptedException {
+    clearScreen();
     in.nextLine();
     boolean run = true;
-    // If user only enters a single number
-    boolean singleDigit = false;
     double result = 0;
-    System.out.println("This calculator takes simple calculations from a user");
-    final char [] opArr = {'+', '-', '/', '*'};
-    String [] splitExpression;
+    boolean singleDigit = false;
+    final String pattern = "-?\\d+\\s+[+-/\\*]\\s+-?\\d+";
 
-    /* Regex patterns
-     * pattern = expression pattern
-     * delimOp = Sets arithmetic operations as a delimiter
-     */
-    final String 
-      pattern = "\\d+\\s*[+-/\\*]\\s*\\d+",
-      delimOp = "[+-/\\*]+";
+    System.out.println(
+        "This calculator takes simple calculations from a user\n" + 
+        "Values must be space separated");
+
+    String [] splitExpression = {""};
 
     do {
       double lhs, rhs;
       lhs = rhs = 0;
       char op = ' ';
+      System.out.print("> ");
       String expression = in.nextLine();
-  
-      // Stores the two values to be evaluated
-      splitExpression = expression.split(delimOp);
 
-      if(splitExpression.length == 1) {
+      // Check if pattern is correct (lhs op rhs)
+      if (!expression.matches(pattern)) {
+        System.err.println("Syntax Error");
+        badUser();
+        continue;
+      }
+
+      splitExpression = expression.split(" ");
+      
+      // Prints single values
+      if (splitExpression.length == 1) {
         singleDigit = true;
         break;
       }
 
-      // Check if pattern is correct (lhs op rhs)
-      if(!expression.matches(pattern)) {
-        System.err.println("Incorrect expression pattern");
-        continue;
-      }
-
-      lhs = Double.parseDouble(splitExpression[0]);
-      rhs = Double.parseDouble(splitExpression[1]);
-
-      // Sets the operation of the expression
-      for(int x = 0; x < opArr.length; x++)
-        if(expression.indexOf(opArr[x]) > 0)
-          op = expression.charAt(expression.indexOf(opArr[x]));
+      lhs = Double.valueOf(splitExpression[0]);
+      op = splitExpression[1].charAt(0);
+      rhs = Double.valueOf(splitExpression[2]);
 
       switch (op) {
         case '+':
@@ -119,6 +113,7 @@ public class Lab6 {
         case '/':
           if (rhs == 0) {
             System.err.println("Cannot divide by zero. Try again");
+            badInputCount++;
             continue;
           }
 
@@ -131,19 +126,25 @@ public class Lab6 {
 
     } while (run);
 
-    if(singleDigit) {
+    if (singleDigit) 
       System.out.println("Result: " + splitExpression[0]);
-    }
+
     else {
       // Only prints decimals if result contains decimals
-      if(result % 1 == 0)
+      if (result % 1 == 0)
         System.out.printf("Result: %.0f%n%n", result);
       else
         System.out.printf("Result: %.2f%n%n", result);
     }
   }
 
+  /**
+   * Problem 2. Print incrementing 2D array
+   * @author Abdalla
+   * Prints a 5 x 5 matrix with incrementing numbers
+   * */
   static void problem2() {
+    clearScreen();
     System.out.println("");
     for (int i = 1; i < 6; i++) {
       for (int k = i; k <= i + 4; k++)
@@ -153,71 +154,113 @@ public class Lab6 {
     System.out.println("");
   }
 
-  static void problem3() {
-    final int
+  /**
+   * Problem 3. Traverse Board
+   * @author Luis & Abdalla
+   * Prints a 9x9 board that allows user to 
+   * navigate with the given inputs.
+   * Wraps when the point goes over the edge
+   * */
+  static void problem3() throws InterruptedException {
+    final int 
       ROW_SIZE = 9,
       COL_SIZE = 9;
-    
-    boolean quit = false;
-    char [][] board = new char [ROW_SIZE][COL_SIZE];
+
     final char 
-      point = 256,
+      point = '∆',
       unPoint = '-';
+
+    boolean quit = false;
+
+    char[][] board = new char[ROW_SIZE][COL_SIZE];
+
     int xPos, yPos, movDist = 0;
+    // Default starting position
     xPos = yPos = 4;
 
     // Fill board with dashes
-    for (char [] b : board)
+    for (char[] b : board)
       Arrays.fill(b, unPoint);
-      
+
     // Initial position
     board[xPos][yPos] = point;
 
-     printBoard(board);
-     while (!quit) {
-      char input = ' ';
-     
-      System.out.println("Enter the direction you would like to move? (N S E W)\nType 'quit' to end");
-      input = in.next().charAt(0);
-      Character.toUpperCase(input);
+    clearScreen();
 
-      System.out.printf("Enter the number of spaces you would like to move %c%n", input);
-      movDist = in.nextInt();
+    printBoard(board);
+    while (!quit) {
+      String input = "";
+
+      System.out.println(
+              "Enter the direction you would like to move? (N S E W)" +
+              "\nType 'Quit' to end");
+
+      System.out.print("> ");
+      input = in.next();
       
-      switch (input){
-        case 'N': 
-          board[xPos][yPos] = unPoint;
-          yPos+=movDist;
-          yPos = wrapCols(yPos, 9, 9);
-          board[xPos][yPos] = point;
-          break;
-        case 'S':
-          board[xPos][yPos] = unPoint;
-          yPos-=movDist;
-          yPos = wrapCols(yPos, 9, 9);
-          board[xPos][yPos] = point;
-          break;
-        case 'E':
-          board[xPos][yPos] = unPoint;
-          xPos+=movDist;
-          xPos = wrapRows(xPos, 9, 9);
-          board[xPos][yPos] = point;
-          break;
-        case 'W':
-          board[xPos][yPos] = unPoint;
-          xPos-=movDist;
-          xPos = wrapRows(xPos, 9, 9);
-          board[xPos][yPos] = point;
-          break;
+      if(!input.equals("Quit")) { 
+        input = input.substring(0, 1).toUpperCase();
+      
+      if (input.matches("^[NSEW]")) {
+
+        System.out.printf("Enter the number of spaces you would like to move %s%n", input);
+
+        System.out.print("> ");
+        in.nextLine();
+
+        while (!in.hasNextInt()) {
+          in.nextLine();
+          System.err.println("Invalid input. Try again");
+          badUser();
+          System.out.print("> ");
         }
-         printBoard(board);
-     }
+
+        System.out.print("> ");
+        movDist = in.nextInt();
+
+        switch (input) {
+          case "E":
+            board[xPos][yPos] = unPoint;
+            yPos = wrap(yPos, movDist, COL_SIZE, true);
+            board[xPos][yPos] = point;
+            break;
+          case "W":
+            board[xPos][yPos] = unPoint;
+            yPos = wrap(yPos, movDist, COL_SIZE, false);
+            board[xPos][yPos] = point;
+            break;
+          case "S":
+            board[xPos][yPos] = unPoint;
+            xPos = wrap(xPos, movDist, ROW_SIZE, true);
+            board[xPos][yPos] = point;
+            break;
+          case "N":
+            board[xPos][yPos] = unPoint;
+            xPos = wrap(xPos, movDist, ROW_SIZE, false);
+            board[xPos][yPos] = point;
+            break;
+        }
+        clearScreen();
+        printBoard(board);
+      }
+
+      else {
+        System.out.println("Invalid input. Please try again");
+        badUser();
+        }
+
+      }
+
+      else 
+        quit = true;
+
+    }
   }
 
   /**
    * Generates a string menu based on the number of programs to choose from.
    * Prepends the index (offset by +1) by the program name
-   * 
+   * @author Luis
    * @param String Array of program names
    * @return String Program names to run
    */
@@ -226,43 +269,53 @@ public class Lab6 {
     for (int x = 0; x < progNames.length; x++)
       menu += Integer.toString(x + 1) + ". " + progNames[x] + '\n';
 
-    return "Choose a program to run\n" +
-        menu +
-        "0. Exit";
+    return 
+      "Choose a program to run\n" +
+      menu +
+      "0. Exit";
   }
 
-  public static int wrapRows(int pos, int MAX_ROWS, int MAX_COLS) {
-    // Wraps from Top Edge to Bottom Edge
-    if(pos < 0)
-      return MAX_ROWS-1;
+  /**
+   * Wraps an integer position to 0 or maxLength
+   * 
+   * @param pos Current position
+   * @param distance Addend to pos
+   * @param maxLength Edge of the world
+   * @param op true = plus, false = minus
+   * @return position
+   */
+  public static int wrap(int pos, int distance, int maxLength, boolean op) {
+    int destination = (op) ? pos + distance : pos - distance;
 
-    // Wraps from Bottom Edge to Top Edge
-    else if(pos == MAX_ROWS || pos > MAX_ROWS) 
+    if (destination < 0)
+      return maxLength - 1;
+
+    else if (destination == maxLength || destination > maxLength)
       return 0;
-    
-    else
-      return pos;
+
+    return destination;
   }
 
-   public static int wrapCols(int pos, int MAX_ROWS, int MAX_COLS) {
-     if(pos < 0)
-       return MAX_COLS-1;
-
-     // Wraps from Left Edge to Right Edge
-     else if(pos == MAX_COLS || pos > MAX_COLS)
-       return 0;
-
-     // Wraps from Right Edge to Left Edge
-     else
-       return pos;
-   }
-  
   public static void printBoard(char[][] board) {
     for (int x = 0; x < 9; x++) {
       for (int y = 0; y < 9; y++) {
         System.out.printf("%c ", board[x][y]);
       }
       System.out.println("");
+    }
+  }
+
+  // Unecessary methods
+  public static void clearScreen() {
+    System.out.print("\033[H\033[2J");
+    System.out.flush();
+  }
+
+  public static void badUser() throws InterruptedException {
+    badInputCount++;
+    if (badInputCount % 3 == 0) {
+      System.out.println("\n\nSTOP IT! (ノಠ益ಠ)ノ彡┻━┻ \n\n");
+      Thread.sleep(2000);
     }
   }
 }
