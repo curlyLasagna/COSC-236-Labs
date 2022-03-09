@@ -145,8 +145,7 @@ public class Lab6 {
    * */
   static void problem2() {
     clearScreen();
-    System.out.println("");
-    for (int i = 0; i < 5; i++) {
+    for (int i = 1; i <= 5; i++) {
       for (int k = 0; k < 5; k++)
         System.out.print((k + i) + " ");
       System.out.println("");
@@ -198,7 +197,7 @@ public class Lab6 {
       System.out.print("> ");
       input = in.next();
       
-      if(!input.equals("Quit")) { 
+      if(!input.equalsIgnoreCase("Quit")) { 
         input = input.substring(0, 1).toUpperCase();
       
       if (input.matches("^[NSEW]")) {
@@ -289,12 +288,11 @@ public class Lab6 {
     int destination = (op) ? pos + distance : pos - distance;
 
     if (destination < 0)
-      return destination + maxLength;
+      return Math.abs(destination + maxLength) % maxLength;
 
-    else if (destination == maxLength || destination > maxLength) {
-      return ((pos-maxLength) + distance) % (maxLength - 1);
-    }
-
+    else if (destination == maxLength || destination > maxLength)
+      return ((pos - maxLength) + distance) % (maxLength - 1);
+    
     return destination;
   }
 
