@@ -146,9 +146,9 @@ public class Lab6 {
   static void problem2() {
     clearScreen();
     System.out.println("");
-    for (int i = 1; i < 6; i++) {
-      for (int k = i; k <= i + 4; k++)
-        System.out.print(k + " ");
+    for (int i = 0; i < 5; i++) {
+      for (int k = 0; k < 5; k++)
+        System.out.print((k + i) + " ");
       System.out.println("");
     }
     System.out.println("");
@@ -231,6 +231,7 @@ public class Lab6 {
             break;
           case "S":
             board[xPos][yPos] = unPoint;
+            // movDist = (xPos + movDist) % (ROW_SIZE - 1);
             xPos = wrap(xPos, movDist, ROW_SIZE, true);
             board[xPos][yPos] = point;
             break;
@@ -288,10 +289,11 @@ public class Lab6 {
     int destination = (op) ? pos + distance : pos - distance;
 
     if (destination < 0)
-      return maxLength - 1;
+      return destination + maxLength;
 
-    else if (destination == maxLength || destination > maxLength)
-      return 0;
+    else if (destination == maxLength || destination > maxLength) {
+      return ((pos-maxLength) + distance) % (maxLength - 1);
+    }
 
     return destination;
   }
