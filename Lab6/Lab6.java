@@ -63,7 +63,7 @@ public class Lab6 {
     boolean run = true;
     double result = 0;
     boolean singleDigit = false;
-    final String pattern = "-?\\d+\\s+[+-/\\*]\\s+-?\\d+";
+    final String pattern = "-?\\.*\\d+\\.*\\d*\\s+[+-/\\*]\\s+-?\\.*\\d+\\.*\\d*";
 
     System.out.println(
         "This calculator takes simple calculations from a user\n" + 
@@ -78,6 +78,13 @@ public class Lab6 {
       System.out.print("> ");
       String expression = in.nextLine();
 
+      // If user only enters a single value
+      if(expression.matches("-?\\.*\\d+\\.*\\d*")) {
+        singleDigit = true;
+        result = Double.parseDouble(expression);
+        break;
+      }
+
       // Check if pattern is correct (lhs op rhs)
       if (!expression.matches(pattern)) {
         System.err.println("Syntax Error");
@@ -87,12 +94,6 @@ public class Lab6 {
 
       splitExpression = expression.split(" ");
       
-      // Prints single values
-      if (splitExpression.length == 1) {
-        singleDigit = true;
-        break;
-      }
-
       lhs = Double.valueOf(splitExpression[0]);
       op = splitExpression[1].charAt(0);
       rhs = Double.valueOf(splitExpression[2]);
@@ -126,16 +127,11 @@ public class Lab6 {
 
     } while (run);
 
-    if (singleDigit) 
-      System.out.println("Result: " + splitExpression[0]);
-
-    else {
-      // Only prints decimals if result contains decimals
-      if (result % 1 == 0)
-        System.out.printf("Result: %.0f%n%n", result);
-      else
-        System.out.printf("Result: %.2f%n%n", result);
-    }
+    // Only prints decimals if result contains decimals
+    if (result % 1 == 0)
+      System.out.printf("Result: %.0f%n%n", result);
+    else
+      System.out.printf("Result: %.2f%n%n", result);
   }
 
   /**
