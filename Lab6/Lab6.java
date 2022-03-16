@@ -212,6 +212,9 @@ public class Lab6 {
 
         System.out.print("> ");
         movDist = in.nextInt();
+        while(movDist > 0) {
+          System.err.println("Currently doesn't support negative values. Try again");
+        }
 
         switch (input) {
           case "E":
