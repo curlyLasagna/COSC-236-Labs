@@ -3,7 +3,7 @@ import java.io.*;
 
 public class Lab7 {
   static Scanner in = new Scanner(System.in);
-  public static void main(String[] pneumonoultramicroscopicsilicovolcanoconiosis) throws FileNotFoundException , IOException{
+  public static void main(String[] arg) throws FileNotFoundException, IOException {
 
     while(menu());
   
@@ -11,47 +11,67 @@ public class Lab7 {
 
   /* Reads from "input.txt" to calculate the sum of the numbers in the file
    * Identifies the sum, maximum and the average of the values read from file
-   *
    * */
-  static void read_from_file() throws FileNotFoundException, IOException {
-    Scanner rf = new Scanner(new File("input.txt"));
+  static void read_from_file() {
+    String inputFile = "input.txt";
 
-    int countNum = 0;
+    try {
+      Scanner rf = new Scanner(new File(inputFile));
 
-    double 
-      sum = 0,
-      max = 0,
-      currentNum = 0;
+      int countNum = 0;
 
-    while (rf.hasNext()) {
-      max = currentNum;
-      currentNum = rf.nextDouble();
+      double 
+        sum = 0,
+        max = 0,
+        currentNum = 0;
 
-      if(max < currentNum)
+      while (rf.hasNext()) {
         max = currentNum;
+        currentNum = rf.nextDouble();
 
-      sum += currentNum;
-      countNum++;
+        if(max < currentNum)
+          max = currentNum;
+
+        sum += currentNum;
+        countNum++;
+      }
+
+      rf.close();
+      write_to_file(sum, max, sum / countNum);
+    } catch (FileNotFoundException err) {
+        System.err.println(inputFile + " does not exist.");
     }
-
-    rf.close();
-    write_to_file(sum, max, sum / countNum);
-
   }
 
   /* Output sum, max, and average to output.txt
-   * Not a smart way of using variable args as I only need 3 args
-   * but didn't feel like typing out 3 separate arg names on the function header
-   * @param 3 double values 
+   * @param 3 double values: sum, max, avg 
    * */
-  static void write_to_file(double ...d) throws FileNotFoundException, IOException{
-    PrintStream out = new PrintStream(new File("output.txt"));
-    out.printf("Sum: %.2f%nMax: %.2f%nAvg: %.2f%n", d[0], d[1], d[2]);
-    menu();
+  static void write_to_file(double sum, double max, double avg) {
+    try {
+      PrintStream out = new PrintStream(new File("output.txt"));
+
+      out.printf(
+        """
+        Sum: %.2f%n
+        Max: %.2f%n
+        Avg: %.2f%n
+        """,
+        sum, max, avg);
+
+      menu();
+    } 
+    catch (FileNotFoundException err) {
+        System.err.println("File does not exist");
+    }
+    catch (IOException err) {
+        System.err.println("Cannot write to file");
+    }
+
   }
 
   static void write_StudentRec() throws FileNotFoundException, IOException {
-    FileOutputStream fs = new FileOutputStream("students.dat");
+    String outputFile = "student.dat";
+    FileOutputStream fs = new FileOutputStream(outputFile);
     BufferedOutputStream bs = new BufferedOutputStream(fs);
     DataOutputStream ds = new DataOutputStream(bs);
     int studentCount = 0;
@@ -88,11 +108,12 @@ public class Lab7 {
   }
 
   /**
+   * Menu
    * @return boolean whether to continue running the program
    * @throws FileNotFoundException IOException
    */
   static boolean menu() throws FileNotFoundException, IOException {
-
+    
     final String [] progNames = {
       "Get file statistics",
       "Print student information",
@@ -106,31 +127,25 @@ public class Lab7 {
       int choice = 0;
       choice = in.nextInt();
       switch(choice) {
-        case 1: 
-          read_from_file();
-          break;
-        case 2:  
-          write_StudentRec();
-          break;
-        case 3:  
-          read_StudentRec();
-          break;
-        case 0:  
-          System.out.println("Thanks for using our program");
-          break;
-        default:
+        case 1 -> read_from_file();
+        case 2 -> write_StudentRec();
+        case 3 -> read_StudentRec();
+        case 0 -> System.out.println("Thanks for using our program");
+        default -> {
           System.err.println("Invalid option. Try again"); 
           in.nextLine();
+          return true;
+        }
       }
     }
 
     else {
       System.err.println("Invalid option. Try again");
       in.nextLine();
+      return true;
     }
 
-    in.nextLine();
-
+    // Exit program
     return false;
   }
 }
