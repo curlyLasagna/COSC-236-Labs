@@ -83,7 +83,6 @@ public class Lab7 {
 
     String studentData = "";
 
-
     System.out.println("Enter the number of students to enter");
     studentCount = in.nextInt();
 
@@ -92,18 +91,23 @@ public class Lab7 {
         = new DataOutputStream(
             new FileOutputStream(STUDENT_FILE));
 
-      for (int x = 1; x <= studentCount; x++) {
-        System.out.println("Enter student " + x + " first name: ");
-        studentData += in.next() + " ";
-        System.out.println("Enter student " + x + " last name: ");
-        studentData += in.next() + " ";
-        System.out.println("Enter student " + x + " grade: ");
-        studentData += in.next() + " ";
-        System.out.println("What year did the student take this course?");
-        studentData += in.next();
-        in.nextLine();
+      ds.writeInt(studentCount);
 
-        ds.writeUTF(studentData);
+      String [] inputPrompt = {
+        "Enter student first name",
+        "Enter student last name",
+        "Enter student's grade",
+        "What year did the student take this course?"
+      };
+
+      for (int x = 1; x <= studentCount; x++) {
+        for (String prompt : inputPrompt) {
+          System.out.println(prompt);
+          studentData += in.next() + " ";
+        }
+
+        in.nextLine();
+        ds.writeUTF(studentData + '\n');
       }
 
       ds.flush();
@@ -128,11 +132,39 @@ public class Lab7 {
           new FileInputStream(STUDENT_FILE));
 
     int studentCount = 0;
+
+    try {
+      while(dataIn.available() > 0) {
+        System.out.println(dataIn.readUTF());
+      }
     
-    while(dataIn.available() > 0)
-      
     dataIn.close();
     menu();
+    } 
+
+    catch (FileNotFoundException err) {
+      System.err.println("Cannot find file: " + STUDENT_FILE);
+    }
+
+    catch (IOException err) {
+      System.err.println("I/O error");
+    }
+    // while(dataIn.available() > 0) {
+    //   studentCount = dataIn.readInt();
+    //   String [] studentNames = new String [studentCount];
+    //   String [] studentGrades = new String [studentCount];
+    //   String [] yearCourseTaken = new String [studentCount];
+    //   studentNames[0] = dataIn.readUTF();
+    // }
+
+  }
+
+  static void student_menu (
+      int studentCount,
+      String [] studentNames,
+      String [] studentGrades,
+      String [] yearCourseTaken) {
+
   }
 
   /**
