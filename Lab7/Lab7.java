@@ -2,6 +2,11 @@ import java.util.*;
 import java.io.*;
 
 public class Lab7 {
+  final static String 
+    INPUT_FILE = "input.txt",   
+    OUTPUT_FILE = "output.txt",
+    STUDENT_FILE = "student.dat";
+
   static Scanner in = new Scanner(System.in);
   public static void main(String[] arg) throws FileNotFoundException, IOException {
 
@@ -9,14 +14,15 @@ public class Lab7 {
   
   }
 
-  /* Reads from "input.txt" to calculate the sum of the numbers in the file
+  /* 
+   * Reads from "input.txt" to calculate the sum of the numbers in the file
    * Identifies the sum, maximum and the average of the values read from file
    * */
   static void read_from_file() {
-    String inputFile = "input.txt";
-
     try {
-      Scanner rf = new Scanner(new File(inputFile));
+      Scanner rf 
+        = new Scanner(
+            new File(INPUT_FILE));
 
       int countNum = 0;
 
@@ -39,16 +45,19 @@ public class Lab7 {
       rf.close();
       write_to_file(sum, max, sum / countNum);
     } catch (FileNotFoundException err) {
-        System.err.println(inputFile + " does not exist.");
+        System.err.println(INPUT_FILE + " does not exist.");
     }
   }
 
-  /* Output sum, max, and average to output.txt
+  /* 
+   * Output sum, max, and average to output.txt
    * @param 3 double values: sum, max, avg 
    * */
   static void write_to_file(double sum, double max, double avg) {
     try {
-      PrintStream out = new PrintStream(new File("output.txt"));
+      PrintStream out = 
+        new PrintStream(
+            new File(OUTPUT_FILE));
 
       out.printf(
         """
@@ -69,41 +78,60 @@ public class Lab7 {
 
   }
 
-  static void write_StudentRec() throws FileNotFoundException, IOException {
-    String outputFile = "student.dat";
-    FileOutputStream fs = new FileOutputStream(outputFile);
-    BufferedOutputStream bs = new BufferedOutputStream(fs);
-    DataOutputStream ds = new DataOutputStream(bs);
+  static void write_StudentRec() {
     int studentCount = 0;
 
-    String 
-      firstName = "( ͡° ͜ʖ ͡°)",
-      lastName = "[̲̅$̲̅(̲̅ ͡° ͜ʖ ͡°̲̅)̲̅$̲̅]",
-      year = "¯\\_( ͡° ͜ʖ ͡°)_/¯";
+    String studentData = "";
 
-    System.out.println("How many heads");
+
+    System.out.println("Enter the number of students to enter");
     studentCount = in.nextInt();
 
-    for (int x = 1; x <= studentCount; x++) {
-      System.out.println("Enter student " + x + " first name: ");
-      firstName = in.next();
-      System.out.println("Enter student " + x + " last name: ");
-      lastName = in.next();
-      System.out.println("What year did " + firstName + " take this course?");
-      year = in.next();
+    try {
+      DataOutputStream ds 
+        = new DataOutputStream(
+            new FileOutputStream(STUDENT_FILE));
 
-      ds.writeBytes(firstName + '\n' + lastName + '\n' + year);
+      for (int x = 1; x <= studentCount; x++) {
+        System.out.println("Enter student " + x + " first name: ");
+        studentData += in.next() + " ";
+        System.out.println("Enter student " + x + " last name: ");
+        studentData += in.next() + " ";
+        System.out.println("Enter student " + x + " grade: ");
+        studentData += in.next() + " ";
+        System.out.println("What year did the student take this course?");
+        studentData += in.next();
+        in.nextLine();
+
+        ds.writeUTF(studentData);
+      }
+
+      ds.flush();
+      ds.close();
+
+      menu();
+
+      }
+
+    catch(FileNotFoundException e) {
+      System.err.println("Cannot find file: " + STUDENT_FILE);
     }
-
-    fs.close();
-    bs.close();
-    ds.close();
-
-    menu();
+    catch (IOException e) {
+      System.err.println("I/O error");
+      e.printStackTrace();
+    }
   }
 
   static void read_StudentRec() throws FileNotFoundException, IOException{
+    DataInputStream dataIn 
+      = new DataInputStream(
+          new FileInputStream(STUDENT_FILE));
 
+    int studentCount = 0;
+    
+    while(dataIn.available() > 0)
+      
+    dataIn.close();
     menu();
   }
 
