@@ -1,5 +1,19 @@
-import java.util.*;
-import java.io.*;
+import java.util.Scanner;
+import java.io.File;
+
+// Output stream for storing data to file 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+
+// Read/Write bytes to file
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+
+import java.io.PrintStream;
+
+// Exceptions
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 public class Lab7 {
   final static String 
@@ -7,11 +21,18 @@ public class Lab7 {
     OUTPUT_FILE = "output.txt",
     STUDENT_FILE = "student.dat";
 
+  final static String [] progNames = {
+    "Get file statistics",
+    "Write student information",
+    "Read student data"
+  };
+
   static Scanner in = new Scanner(System.in);
-  public static void main(String[] arg) throws FileNotFoundException, IOException {
+  public static void main(String[] arg) 
+    throws FileNotFoundException, IOException {
 
     while(menu());
-  
+
   }
 
   /* 
@@ -44,7 +65,8 @@ public class Lab7 {
 
       rf.close();
       write_to_file(sum, max, sum / countNum);
-    } catch (FileNotFoundException err) {
+    } 
+    catch (FileNotFoundException err) {
         System.err.println(INPUT_FILE + " does not exist.");
     }
   }
@@ -54,10 +76,9 @@ public class Lab7 {
    * @param 3 double values: sum, max, avg 
    * */
   static void write_to_file(double sum, double max, double avg) {
-    try {
-      PrintStream out = 
-        new PrintStream(
-            new File(OUTPUT_FILE));
+    try (PrintStream out = 
+      new PrintStream(
+        new File(OUTPUT_FILE))) {
 
       out.printf(
         """
@@ -78,6 +99,10 @@ public class Lab7 {
 
   }
 
+  /**
+   * Get user input to write 
+   * student information to student.dat 
+   * */
   static void write_StudentRec() {
     int studentCount = 0;
 
@@ -86,33 +111,33 @@ public class Lab7 {
     System.out.println("Enter the number of students to enter");
     studentCount = in.nextInt();
 
-    try {
-      DataOutputStream ds 
-        = new DataOutputStream(
-            new FileOutputStream(STUDENT_FILE));
+    try (DataOutputStream ds = 
+      new DataOutputStream (
+        new FileOutputStream(STUDENT_FILE))) {
 
       ds.writeInt(studentCount);
 
       String [] inputPrompt = {
-        "Enter student first name",
-        "Enter student last name",
+        "Enter student full name",
         "Enter student's grade",
         "What year did the student take this course?"
       };
 
-      for (int x = 1; x <= studentCount; x++) {
+      for (int x = 0; x < studentCount; x++) {
         for (String prompt : inputPrompt) {
           System.out.println(prompt);
-          studentData += in.next() + " ";
+          studentData += in.nextLine();
+
+          if(studentData.isEmpty())
+            studentData = "N/A";
+
+          ds.writeUTF(studentData + '$');
         }
 
-        in.nextLine();
-        ds.writeUTF(studentData + '\n');
+        miscFunc.clearScreen();
       }
 
       ds.flush();
-      ds.close();
-
       menu();
 
       }
@@ -120,26 +145,38 @@ public class Lab7 {
     catch(FileNotFoundException e) {
       System.err.println("Cannot find file: " + STUDENT_FILE);
     }
+
     catch (IOException e) {
-      System.err.println("I/O error");
+      System.err.println("Unable to write to " + STUDENT_FILE);
       e.printStackTrace();
     }
   }
 
-  static void read_StudentRec() throws FileNotFoundException, IOException{
-    DataInputStream dataIn 
-      = new DataInputStream(
-          new FileInputStream(STUDENT_FILE));
+  /**
+   * Reads data from student.dat
+   * @throws FileNotFoundException
+   * @throws IOException
+   */
+  static void read_StudentRec() 
+      throws FileNotFoundException, IOException{
 
     int studentCount = 0;
 
-    try {
+    try (DataInputStream dataIn = 
+      new DataInputStream(
+          new FileInputStream(STUDENT_FILE))) {
+
+      studentCount = dataIn.readInt();
+      String [] studentNames = new String [studentCount];
+      String [] studentGrades = new String [studentCount];
+      String [] yearCourseTaken = new String [studentCount];
+
       while(dataIn.available() > 0) {
-        System.out.println(dataIn.readUTF());
+        studentNames[0] = dataIn.readUTF();
       }
-    
-    dataIn.close();
-    menu();
+
+      System.out.println(studentNames[0]);
+      menu();
     } 
 
     catch (FileNotFoundException err) {
@@ -147,16 +184,8 @@ public class Lab7 {
     }
 
     catch (IOException err) {
-      System.err.println("I/O error");
+      System.err.println("Unable to read" + STUDENT_FILE);
     }
-    // while(dataIn.available() > 0) {
-    //   studentCount = dataIn.readInt();
-    //   String [] studentNames = new String [studentCount];
-    //   String [] studentGrades = new String [studentCount];
-    //   String [] yearCourseTaken = new String [studentCount];
-    //   studentNames[0] = dataIn.readUTF();
-    // }
-
   }
 
   static void student_menu (
@@ -164,7 +193,6 @@ public class Lab7 {
       String [] studentNames,
       String [] studentGrades,
       String [] yearCourseTaken) {
-
   }
 
   /**
@@ -172,14 +200,9 @@ public class Lab7 {
    * @return boolean whether to continue running the program
    * @throws FileNotFoundException IOException
    */
-  static boolean menu() throws FileNotFoundException, IOException {
+  static boolean menu() 
+      throws FileNotFoundException, IOException {
     
-    final String [] progNames = {
-      "Get file statistics",
-      "Print student information",
-      "Read student data"
-    };
-
     System.out.println(miscFunc.getMenu(progNames));
     System.out.print("> ");
 
@@ -192,6 +215,7 @@ public class Lab7 {
         case 3 -> read_StudentRec();
         case 0 -> System.out.println("Thanks for using our program");
         default -> {
+          miscFunc.clearScreen();    
           System.err.println("Invalid option. Try again"); 
           in.nextLine();
           return true;
@@ -200,6 +224,7 @@ public class Lab7 {
     }
 
     else {
+      miscFunc.clearScreen();    
       System.err.println("Invalid option. Try again");
       in.nextLine();
       return true;
