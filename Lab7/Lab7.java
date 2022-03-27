@@ -118,7 +118,8 @@ public class Lab7 {
       ds.writeInt(studentCount);
 
       String [] inputPrompt = {
-        "Enter student full name",
+        "Enter student first name",
+        "Enter student last name",
         "Enter student's grade",
         "What year did the student take this course?"
       };
@@ -126,13 +127,14 @@ public class Lab7 {
       for (int x = 0; x < studentCount; x++) {
         for (String prompt : inputPrompt) {
           System.out.println(prompt);
-          studentData += in.nextLine();
+          studentData += in.next() + " ";
 
-          if(studentData.isEmpty())
-            studentData = "N/A";
+          // if(in.next().isEmpty())
+          //   studentData = "N/A";
+          }
 
-          ds.writeUTF(studentData + '$');
-        }
+        in.nextLine();
+        ds.writeUTF(studentData);
 
         miscFunc.clearScreen();
       }
