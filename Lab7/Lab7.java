@@ -41,7 +41,8 @@ public class Lab7 {
    * Identifies the sum, maximum and the average of the values read from file
    * Prints values to OUTPUT_FILE
    * */
-  static void read_from_file() {
+  static void read_from_file() 
+    throws FileNotFoundException, IOException {
     try {
       Scanner rf 
         = new Scanner(
@@ -69,7 +70,8 @@ public class Lab7 {
       write_to_file(sum, max, sum / countNum);
     } 
     catch (FileNotFoundException err) {
-        System.err.println("Cannot find " + INPUT_FILE);
+      System.err.println("Cannot find " + INPUT_FILE);
+      menu();
     }
   }
 
@@ -77,7 +79,8 @@ public class Lab7 {
    * Output sum, max, and average to output.txt
    * @param 3 double values: sum, max, avg 
    * */
-  static void write_to_file(double sum, double max, double avg) {
+  static void write_to_file(double sum, double max, double avg) 
+    throws FileNotFoundException, IOException {
     try (PrintStream out = 
       new PrintStream(
         new File(OUTPUT_FILE))) {
@@ -94,9 +97,11 @@ public class Lab7 {
     } 
     catch (FileNotFoundException err) {
         System.err.println("File does not exist");
+        menu();
     }
     catch (IOException err) {
         System.err.println("Cannot write to " + OUTPUT_FILE);
+        menu();
     }
   }
 
@@ -104,48 +109,50 @@ public class Lab7 {
    * Get user input to write 
    * student information to student.dat 
    * */
-  static void write_StudentRec() {
-    int studentCount = 0;
+  static void write_StudentRec() 
+    throws FileNotFoundException, IOException {
+      int studentCount = 0;
 
-    String studentData = "";
+      String studentData = "";
 
-    System.out.println("Enter the number of student records to enter");
-    studentCount = in.nextInt();
+      System.out.println("Enter the number of student records to enter");
+      studentCount = in.nextInt();
 
-    try (DataOutputStream ds = 
-      new DataOutputStream (
-        new FileOutputStream(STUDENT_FILE))) {
+      try (DataOutputStream ds = 
+        new DataOutputStream (
+          new FileOutputStream(STUDENT_FILE))) {
 
-      ds.writeInt(studentCount);
+        ds.writeInt(studentCount);
 
-      String [] inputPrompt = {
-        "Enter student first name",
-        "Enter student last name",
-        "Enter student's grade",
-        "What year did the student take this course?"
-      };
+        String [] inputPrompt = {
+          "Enter student first name",
+          "Enter student last name",
+          "Enter student's grade",
+          "What year did the student take this course?"
+        };
 
-      for (int x = 0; x < studentCount; x++) {
-        miscFunc.clearScreen();
-        for (String prompt : inputPrompt) {
-          System.out.println(prompt);
-          studentData += in.next() + ',';
+        for (int x = 0; x < studentCount; x++) {
+          miscFunc.clearScreen();
+          for (String prompt : inputPrompt) {
+            System.out.println(prompt);
+            studentData += in.next() + ',';
+          }
+          ds.writeUTF(studentData);
         }
-        ds.writeUTF(studentData);
+        ds.flush();
+        menu();
+
+        }
+
+      catch(FileNotFoundException e) {
+        System.err.println("Cannot find file: " + STUDENT_FILE);
+        menu();
       }
-      ds.flush();
-      menu();
 
+      catch (IOException e) {
+        System.err.println("Unable to write to " + STUDENT_FILE);
+        menu();
       }
-
-    catch(FileNotFoundException e) {
-      System.err.println("Cannot find file: " + STUDENT_FILE);
-    }
-
-    catch (IOException e) {
-      System.err.println("Unable to write to " + STUDENT_FILE);
-      System.err.println(e.getMessage());
-    }
   }
 
   /**
@@ -194,36 +201,38 @@ public class Lab7 {
 
     catch (FileNotFoundException err) {
       System.err.println("Cannot find file: " + STUDENT_FILE);
+      menu();
     }
 
     catch (IOException err) {
-      System.err.println("Unable to read" + STUDENT_FILE);
+      System.err.println("Unable to read " + STUDENT_FILE);
+      menu();
     }
   }
 
   static void student_menu (
-      String [] studentNames,
-      String [] studentGrades,
-      String [] yearCourseTaken) {
+    String [] studentNames,
+    String [] studentGrades,
+    String [] yearCourseTaken) {
 
-        int choice = 0;
-        miscFunc.clearScreen();
-        System.out.println("Choose student to view full record");
-        for(int i = 0; i < studentNames.length; i++) 
-          System.out.printf("%d. %s%n", i + 1, studentNames[i]);
-        
-        System.out.print("> ");
-        choice = in.nextInt() - 1;
+      int choice = 0;
+      miscFunc.clearScreen();
+      System.out.println("Choose student to view full record");
+      for(int i = 0; i < studentNames.length; i++) 
+        System.out.printf("%d. %s%n", i + 1, studentNames[i]);
+      
+      System.out.print("> ");
+      choice = in.nextInt() - 1;
 
-        System.out.printf(
-          """
-          %nFull name: %s 
-          Grade: %s
-          Year course taken: %s%n
-          """,
-          studentNames[choice], 
-          studentGrades[choice], 
-          yearCourseTaken[choice]);
+      System.out.printf(
+        """
+        %nFull name: %s 
+        Grade: %s
+        Year course taken: %s%n
+        """,
+        studentNames[choice], 
+        studentGrades[choice], 
+        yearCourseTaken[choice]);
   }
 
   /**
@@ -232,7 +241,7 @@ public class Lab7 {
    * @throws FileNotFoundException IOException
    */
   static boolean menu() 
-      throws FileNotFoundException, IOException {
+    throws FileNotFoundException, IOException {
     
     System.out.println(miscFunc.getMenu(progNames));
     System.out.print("> ");
