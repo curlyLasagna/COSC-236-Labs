@@ -9,6 +9,7 @@ import java.io.FileOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 
+// Writes text file
 import java.io.PrintStream;
 
 // Exceptions
@@ -22,7 +23,7 @@ public class Lab7 {
     STUDENT_FILE = "student.dat";
 
   final static String [] progNames = {
-    "Get file statistics",
+    "Text file arithmetic",
     "Write student information",
     "Read student data"
   };
@@ -38,6 +39,7 @@ public class Lab7 {
   /* 
    * Reads from "input.txt" to calculate the sum of the numbers in the file
    * Identifies the sum, maximum and the average of the values read from file
+   * Prints values to OUTPUT_FILE
    * */
   static void read_from_file() {
     try {
@@ -67,7 +69,7 @@ public class Lab7 {
       write_to_file(sum, max, sum / countNum);
     } 
     catch (FileNotFoundException err) {
-        System.err.println(INPUT_FILE + " does not exist.");
+        System.err.println("Cannot find " + INPUT_FILE);
     }
   }
 
@@ -94,9 +96,8 @@ public class Lab7 {
         System.err.println("File does not exist");
     }
     catch (IOException err) {
-        System.err.println("Cannot write to file");
+        System.err.println("Cannot write to " + OUTPUT_FILE);
     }
-
   }
 
   /**
@@ -108,7 +109,7 @@ public class Lab7 {
 
     String studentData = "";
 
-    System.out.println("Enter the number of students to enter");
+    System.out.println("Enter the number of student records to enter");
     studentCount = in.nextInt();
 
     try (DataOutputStream ds = 
@@ -125,20 +126,13 @@ public class Lab7 {
       };
 
       for (int x = 0; x < studentCount; x++) {
+        miscFunc.clearScreen();
         for (String prompt : inputPrompt) {
           System.out.println(prompt);
-          studentData += in.next() + " ";
-
-          // if(in.next().isEmpty())
-          //   studentData = "N/A";
-          }
-
-        in.nextLine();
+          studentData += in.next() + ',';
+        }
         ds.writeUTF(studentData);
-
-        miscFunc.clearScreen();
       }
-
       ds.flush();
       menu();
 
@@ -150,7 +144,7 @@ public class Lab7 {
 
     catch (IOException e) {
       System.err.println("Unable to write to " + STUDENT_FILE);
-      e.printStackTrace();
+      System.err.println(e.getMessage());
     }
   }
 
@@ -160,7 +154,7 @@ public class Lab7 {
    * @throws IOException
    */
   static void read_StudentRec() 
-      throws FileNotFoundException, IOException{
+      throws FileNotFoundException, IOException {
 
     int studentCount = 0;
 
@@ -173,11 +167,28 @@ public class Lab7 {
       String [] studentGrades = new String [studentCount];
       String [] yearCourseTaken = new String [studentCount];
 
-      while(dataIn.available() > 0) {
-        studentNames[0] = dataIn.readUTF();
-      }
+      String test = "";
+      while(dataIn.available() > 0) 
+        test = dataIn.readUTF();
 
-      System.out.println(studentNames[0]);
+      String [] splitData = new String [studentCount];
+      
+      splitData = test.split(",");
+      
+      // Not my proudest moment -LG
+      // Get student names
+      for (int i = 0, k = 0; i < splitData.length; i+=4, k++)
+        studentNames[k] = splitData[i] + ' ' + splitData[i + 1];
+
+      // Get grades
+      for (int i = 2, k = 0; i < splitData.length; i+=4, k++)
+        studentGrades[k] = splitData[i];
+
+      // Get year
+      for (int i = 3, k = 0; i < splitData.length; i+=4, k++)
+        yearCourseTaken[k] = splitData[i];
+
+      student_menu(studentNames, studentGrades, yearCourseTaken);
       menu();
     } 
 
@@ -191,10 +202,28 @@ public class Lab7 {
   }
 
   static void student_menu (
-      int studentCount,
       String [] studentNames,
       String [] studentGrades,
       String [] yearCourseTaken) {
+
+        int choice = 0;
+        miscFunc.clearScreen();
+        System.out.println("Choose student to view full record");
+        for(int i = 0; i < studentNames.length; i++) 
+          System.out.printf("%d. %s%n", i + 1, studentNames[i]);
+        
+        System.out.print("> ");
+        choice = in.nextInt() - 1;
+
+        System.out.printf(
+          """
+          %nFull name: %s 
+          Grade: %s
+          Year course taken: %s%n
+          """,
+          studentNames[choice], 
+          studentGrades[choice], 
+          yearCourseTaken[choice]);
   }
 
   /**
