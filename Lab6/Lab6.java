@@ -63,7 +63,11 @@ public class Lab6 {
     boolean run = true;
     double result = 0;
     boolean singleDigit = false;
+<<<<<<< HEAD
     final String pattern = "-?\\d+\\s+[+-/\\*]\\s+-?\\d+";
+=======
+    final String pattern = "-?\\.*\\d+\\.*\\d*\\s+[+-/\\*]\\s+-?\\.*\\d+\\.*\\d*";
+>>>>>>> e4e77d8ab8d25c06a70031e70336c1e33a74873d
 
     System.out.println(
         "This calculator takes simple calculations from a user\n" + 
@@ -78,6 +82,16 @@ public class Lab6 {
       System.out.print("> ");
       String expression = in.nextLine();
 
+<<<<<<< HEAD
+=======
+      // If user only enters a single value
+      if(expression.matches("-?\\.*\\d+\\.*\\d*")) {
+        singleDigit = true;
+        result = Double.parseDouble(expression);
+        break;
+      }
+
+>>>>>>> e4e77d8ab8d25c06a70031e70336c1e33a74873d
       // Check if pattern is correct (lhs op rhs)
       if (!expression.matches(pattern)) {
         System.err.println("Syntax Error");
@@ -87,12 +101,15 @@ public class Lab6 {
 
       splitExpression = expression.split(" ");
       
+<<<<<<< HEAD
       // Prints single values
       if (splitExpression.length == 1) {
         singleDigit = true;
         break;
       }
 
+=======
+>>>>>>> e4e77d8ab8d25c06a70031e70336c1e33a74873d
       lhs = Double.valueOf(splitExpression[0]);
       op = splitExpression[1].charAt(0);
       rhs = Double.valueOf(splitExpression[2]);
@@ -126,6 +143,7 @@ public class Lab6 {
 
     } while (run);
 
+<<<<<<< HEAD
     if (singleDigit) 
       System.out.println("Result: " + splitExpression[0]);
 
@@ -136,6 +154,13 @@ public class Lab6 {
       else
         System.out.printf("Result: %.2f%n%n", result);
     }
+=======
+    // Only prints decimals if result contains decimals
+    if (result % 1 == 0)
+      System.out.printf("Result: %.0f%n%n", result);
+    else
+      System.out.printf("Result: %.2f%n%n", result);
+>>>>>>> e4e77d8ab8d25c06a70031e70336c1e33a74873d
   }
 
   /**
@@ -145,10 +170,16 @@ public class Lab6 {
    * */
   static void problem2() {
     clearScreen();
+<<<<<<< HEAD
     System.out.println("");
     for (int i = 1; i < 6; i++) {
       for (int k = i; k <= i + 4; k++)
         System.out.print(k + " ");
+=======
+    for (int i = 1; i <= 5; i++) {
+      for (int k = 0; k < 5; k++)
+        System.out.print((k + i) + " ");
+>>>>>>> e4e77d8ab8d25c06a70031e70336c1e33a74873d
       System.out.println("");
     }
     System.out.println("");
@@ -198,7 +229,11 @@ public class Lab6 {
       System.out.print("> ");
       input = in.next();
       
+<<<<<<< HEAD
       if(!input.equals("Quit")) { 
+=======
+      if(!input.equalsIgnoreCase("Quit")) { 
+>>>>>>> e4e77d8ab8d25c06a70031e70336c1e33a74873d
         input = input.substring(0, 1).toUpperCase();
       
       if (input.matches("^[NSEW]")) {
@@ -217,6 +252,12 @@ public class Lab6 {
 
         System.out.print("> ");
         movDist = in.nextInt();
+<<<<<<< HEAD
+=======
+        while(movDist > 0) {
+          System.err.println("Currently doesn't support negative values. Try again");
+        }
+>>>>>>> e4e77d8ab8d25c06a70031e70336c1e33a74873d
 
         switch (input) {
           case "E":
@@ -231,6 +272,10 @@ public class Lab6 {
             break;
           case "S":
             board[xPos][yPos] = unPoint;
+<<<<<<< HEAD
+=======
+            // movDist = (xPos + movDist) % (ROW_SIZE - 1);
+>>>>>>> e4e77d8ab8d25c06a70031e70336c1e33a74873d
             xPos = wrap(xPos, movDist, ROW_SIZE, true);
             board[xPos][yPos] = point;
             break;
@@ -288,11 +333,19 @@ public class Lab6 {
     int destination = (op) ? pos + distance : pos - distance;
 
     if (destination < 0)
+<<<<<<< HEAD
       return maxLength - 1;
 
     else if (destination == maxLength || destination > maxLength)
       return 0;
 
+=======
+      return Math.abs(destination + maxLength) % maxLength;
+
+    else if (destination == maxLength || destination > maxLength)
+      return ((pos - maxLength) + distance) % (maxLength - 1);
+    
+>>>>>>> e4e77d8ab8d25c06a70031e70336c1e33a74873d
     return destination;
   }
 
