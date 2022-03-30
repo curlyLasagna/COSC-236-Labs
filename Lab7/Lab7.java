@@ -205,6 +205,12 @@ public class Lab7 {
     }
   }
 
+  /**
+   * Prints a menu for user to choose to print detailed student information 
+   * @param studentNames
+   * @param studentGrades
+   * @param yearCourseTaken
+   */
   static void student_menu(
       String[] studentNames,
       String[] studentGrades,
