@@ -1,15 +1,30 @@
+import java.util.Random;
 import java.util.Scanner;
 
 public class Lab8 {
    
    public static void main(String[] args) {
+      Random rand = new Random(System.currentTimeMillis());
       Scanner keyboard = new Scanner(System.in);
-      getString(keyboard, "Please give me the name of any item");
-      getString(keyboard, "Enter a color name");
-      getString(keyboard, "Please enter the name of a different color");
-      getInt(keyboard, "What is the maximum number of rare giant toenail's can someone have");
-      getInt(keyboard, "What is the minimum number of rare giant toenail's can someone have");
-      getDouble(keyboard, "What is the maximum price someone might pay for a giant toenail");
+      String [] colors = new String [2];
+
+      String itemName = getString(keyboard, "Please give me the name of any item");
+
+      colors[0] = getString(keyboard, "Enter a color name");
+      colors[1] = getString(keyboard, "Please enter the name of a different color");
+
+      int maxCount = getInt(keyboard, "What is the maximum number of " + itemName + " can someone have");
+      int minCount = getInt(keyboard, "What is the minimum number of " + itemName + " can someone have");
+
+      double maxPrice = getDouble(keyboard, "What is the maximum price someone might pay for a " + itemName);
+      double minPrice = getDouble(keyboard, "What is the minimum price someone might pay for a " + itemName);
+
+      int itemStock = rand.nextInt(maxCount);
+      int buyCount = getInt(keyboard, "We have " + itemStock + " " + itemName + ", how many would you like to buy?");
+
+      // while() {
+
+      // }
 
       keyboard.close();
    }

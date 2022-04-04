@@ -11,8 +11,8 @@ dependencies {
 	testImplementation('org.junit.jupiter:junit-jupiter')
 }
 
-mainClassName = 'Lab8.java'
+// mainClassName = 'Lab8.java'
 task mkOutDir (type: Exec) {
   workingDir "${project.buildDir}"
-    commandLine 'mkdir out'
+    commandLine 'mkdir', 'out'
 }
