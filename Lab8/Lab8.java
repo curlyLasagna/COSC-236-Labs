@@ -4,29 +4,7 @@ import java.util.Scanner;
 public class Lab8 {
    
    public static void main(String[] args) {
-      Random rand = new Random(System.currentTimeMillis());
-      Scanner keyboard = new Scanner(System.in);
-      String [] colors = new String [2];
-
-      String itemName = getString(keyboard, "Please give me the name of any item");
-
-      colors[0] = getString(keyboard, "Enter a color name");
-      colors[1] = getString(keyboard, "Please enter the name of a different color");
-
-      int maxCount = getInt(keyboard, "What is the maximum number of " + itemName + " can someone have");
-      int minCount = getInt(keyboard, "What is the minimum number of " + itemName + " can someone have");
-
-      double maxPrice = getDouble(keyboard, "What is the maximum price someone might pay for a " + itemName);
-      double minPrice = getDouble(keyboard, "What is the minimum price someone might pay for a " + itemName);
-
-      int itemStock = rand.nextInt(maxCount);
-      int buyCount = getInt(keyboard, "We have " + itemStock + " " + itemName + ", how many would you like to buy?");
-
-      // while() {
-
-      // }
-
-      keyboard.close();
+      userPrompt();
    }
 
    /** Method 1 
@@ -60,7 +38,7 @@ public class Lab8 {
    }
 
    /** Method 2
-     * Gets an Int from the keyboard. 
+     * Gets an Int from the keyboard. Only positive numbers are allowed
      * @param msg is the text that will be displayed the user to ask them to enter a number.
      * @return Returns an int from the keyboard. 
      */  
@@ -78,7 +56,7 @@ public class Lab8 {
    }
 
    /** Method 3 
-     * Gets an integer greater than and less than the supplied parameters. 
+     * Gets an integer greater than and less than the supplied parameters. Only positive numbers are allowed 
      * @param msg is the text that will be displayed the user to ask them to enter a value.
      * @param low is the lowest acceptable input value.
      * @param high is the highest acceptable input value.
@@ -132,5 +110,58 @@ public class Lab8 {
       }
          return number;
    }
-   
+
+   /** 
+    * User prompts
+    */
+   static void userPrompt() {
+      Random rand = new Random(System.currentTimeMillis());
+      Scanner keyboard = new Scanner(System.in);
+      String [] colors = new String [2];
+
+      String itemName = getString(keyboard, "Please give me the name of any item");
+
+      colors[0] = getString(keyboard, "Enter a color name");
+      colors[1] = getString(keyboard, "Please enter the name of a different color");
+
+      while(colors[0].equalsIgnoreCase(colors[1])) {
+         System.err.println("Must be a different color");
+         colors[1] = getString(keyboard, "Please enter the name of a different color");
+      }
+
+      int maxCount = getInt(keyboard, "What is the maximum number of " + itemName + " can someone have?");
+      int minCount = getInt(keyboard, "What is the minimum number of " + itemName + " can someone have?");
+
+      double maxPrice = getDouble(keyboard, "What is the maximum price someone might pay for a " + itemName);
+      double minPrice = getDouble(keyboard, "What is the minimum price someone might pay for a " + itemName);
+
+      int itemStock = rand.nextInt(maxCount);
+      String colorChoice = colors [rand.nextInt(colors.length)];
+
+      int buyCount = getIntBetweenLowAndHigh(
+         keyboard, 
+         String.format("We have %s %s %s. How many would you like to buy?", 
+            itemStock, colorChoice, itemName), 
+         String.format("Number must be between %d & %d", 
+            minCount, maxCount), 
+         minCount, itemStock);
+
+      double goodPrice = getDoubleBetweenLowAndHigh(
+         keyboard, 
+         String.format("How much are you willing to pay for each %s %s", 
+            colorChoice, itemName), 
+         String.format("Input must be between %f & %f", 
+            minPrice, maxPrice), 
+         minPrice, maxPrice);
+
+      double finalPrice = 0;
+
+      finalPrice = buyCount * goodPrice;
+
+      System.out.printf(
+         "The total cost for %d %s %s at $%.2f each is $%.2f", 
+            buyCount, colorChoice, itemName, goodPrice, finalPrice);
+
+      keyboard.close();
+   }
 }
