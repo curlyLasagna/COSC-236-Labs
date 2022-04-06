@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -22,7 +23,6 @@ public class Lab8 {
          System.err.println("Error reading input from user. Ending program.");
          System.exit(-1);
       } 
-      
       while (answer.replace(" ", "").equals("")) {
          System.err.println("Error: Missing input.");
          try {
@@ -50,7 +50,7 @@ public class Lab8 {
          System.err.println("Invalid integer. Try again.");
       }
 
-      int number = keyboard.nextInt();
+      int number = getPositiveVal(keyboard);
       keyboard.nextLine();
       return number;
    }
@@ -86,7 +86,7 @@ public class Lab8 {
          keyboard.nextLine();
          System.err.println("Invalid number. Try again.");
       }
-      double number = keyboard.nextDouble();
+      double number = getValidDouble(keyboard);
       keyboard.nextLine();
       return number;
    }
@@ -111,8 +111,43 @@ public class Lab8 {
          return number;
    }
 
+   static int getPositiveVal(Scanner keyboard) {
+      int val = keyboard.nextInt();
+      while(val < 0) {
+         keyboard.nextLine();
+         System.err.println("Input must be postiive");
+         val = keyboard.nextInt();
+      }
+      return val;
+   }
+   
+   static double getPositiveDouble(Scanner keyboard) {
+      double val = keyboard.nextDouble();
+      while(val < 0) {
+         keyboard.nextLine();
+         System.err.println("Input must be postiive");
+         val = keyboard.nextInt();
+      }
+      return val;
+   }
+
+   /**
+    * Ensures double input contains a decimal point
+    * @param Scanner object keyboard
+    * @return double containing a decimal point
+    */
+   static double getValidDouble(Scanner keyboard) {
+      double input = keyboard.nextDouble();
+      while(!Double.toString(input).matches("^\\d+\\.\\d+")) {
+         System.err.println(input + " is not a vlid double. Please enter a double");
+         keyboard.nextLine();
+         input = keyboard.nextDouble();
+      }
+      return input;
+   }
+
    /** 
-    * User prompts
+    * User prompt
     */
    static void userPrompt() {
       Random rand = new Random(System.currentTimeMillis());
@@ -150,13 +185,11 @@ public class Lab8 {
          keyboard, 
          String.format("How much are you willing to pay for each %s %s", 
             colorChoice, itemName), 
-         String.format("Input must be between %f & %f", 
+         String.format("Input must be between %.2f & %.2f", 
             minPrice, maxPrice), 
          minPrice, maxPrice);
 
-      double finalPrice = 0;
-
-      finalPrice = buyCount * goodPrice;
+      double finalPrice = buyCount * goodPrice;
 
       System.out.printf(
          "The total cost for %d %s %s at $%.2f each is $%.2f", 
