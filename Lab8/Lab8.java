@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -22,7 +23,6 @@ public class Lab8 {
          System.err.println("Error reading input from user. Ending program.");
          System.exit(-1);
       } 
-      
       while (answer.replace(" ", "").equals("")) {
          System.err.println("Error: Missing input.");
          try {
@@ -50,7 +50,7 @@ public class Lab8 {
          System.err.println("Invalid integer. Try again.");
       }
 
-      int number = keyboard.nextInt();
+      int number = getPositiveVal(keyboard);
       keyboard.nextLine();
       return number;
    }
@@ -111,7 +111,8 @@ public class Lab8 {
          return number;
    }
 
-   static int getPositiveVal(Scanner keyboard, int val) {
+   static int getPositiveVal(Scanner keyboard) {
+      int val = keyboard.nextInt();
       while(val < 0) {
          keyboard.nextLine();
          System.err.println("Input must be postiive");
@@ -120,7 +121,8 @@ public class Lab8 {
       return val;
    }
    
-   static double getPositiveVal(Scanner keyboard, double val) {
+   static double getPositiveDouble(Scanner keyboard) {
+      double val = keyboard.nextDouble();
       while(val < 0) {
          keyboard.nextLine();
          System.err.println("Input must be postiive");
