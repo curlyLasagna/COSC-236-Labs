@@ -13,7 +13,18 @@ public class Creature {
     endurance, 
     phraseIndex = 0;
 
-  private String [] creaturePhrase;
+  private String [] creaturePhrase = {
+    "For cryin' out loud",
+    "I quite fancy you",
+    "That's gobblydigook",
+    "I'm chuffed to bits",
+    "That's cap bruv",
+    "Issa vibe",
+    "Bruh moment",
+    "Sussy baka",
+    "Ooof",
+    "Spill the tea sis"
+  };
 
   /**
    * When constructing an object, user is prompt to enter appropriate field values
@@ -92,9 +103,31 @@ public class Creature {
     return (this.endurance <= 0) ? true : false;
   }
 
-  //
-  String getRandomPhrase() {
-    return "";
+  /**
+   * Increments phrase index and warps back to 0
+   * @return String phrase 
+   */
+  String getPhrase() {
+    return (phraseIndex >= creaturePhrase.length) 
+      ? creaturePhrase[0] : creaturePhrase[phraseIndex++] ;
+  }
+
+  void setNewPhrase(String phrase) {
+    if(phraseIndex >= creaturePhrase.length)
+      creaturePhrase[0] = phrase;
+    else
+      creaturePhrase[phraseIndex++] = phrase;
+  }
+
+  String feed(String food) {
+    endurance--;
+    return 
+    String.format(
+      """
+      You feed %s with %s 
+      He's very allergic to %s. Good job!
+      """,
+      name, food, food);
   }
 
   @Override
@@ -108,5 +141,4 @@ public class Creature {
       """, 
       getName(), getDescription(), getEndurance());
   }
-
 }

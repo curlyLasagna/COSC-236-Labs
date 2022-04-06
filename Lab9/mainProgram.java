@@ -1,10 +1,11 @@
 package Lab9;
 
 import java.io.*;
+import Lab9.Creature;
 
 class mainProgram {
 
-    final static String CREATURE_FILE = "creature.dat";
+  final static String CREATURE_FILE = "creature.dat";
 
   public static void main(String [] args) {
     Creature x = new Creature();
