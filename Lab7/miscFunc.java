@@ -15,4 +15,8 @@ public class miscFunc {
     System.out.print("\033[H\033[2J");
     System.out.flush();
   }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> e4e77d8ab8d25c06a70031e70336c1e33a74873d
