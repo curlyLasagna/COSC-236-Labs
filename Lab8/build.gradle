@@ -1,0 +1,18 @@
+plugins {
+  id 'java'
+}
+
+repositories {
+  mavenCentral()
+}
+
+dependencies {
+	testImplementation(platform('org.junit:junit-bom:5.8.2'))
+	testImplementation('org.junit.jupiter:junit-jupiter')
+}
+
+// mainClassName = 'Lab8.java'
+task mkOutDir (type: Exec) {
+  workingDir "${project.buildDir}"
+    commandLine 'mkdir', 'out'
+}
