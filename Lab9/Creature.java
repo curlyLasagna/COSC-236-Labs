@@ -9,22 +9,30 @@ public class Creature {
     description,
     fileName;
       
-  private int endurance, phraseIndex = 0;
+  private int 
+    endurance, 
+    phraseIndex = 0;
+
   private String [] creaturePhrase;
+
+  /**
+   * When constructing an object, user is prompt to enter appropriate field values
+   */
   public Creature() {
-    Scanner in = new Scanner(System.in);
-    System.out.println("Set creature attributes");
+    try (Scanner in = new Scanner(System.in)) {
+      System.out.println("Set creature attributes");
 
-    System.out.print("Name: ");
-    setName(in.nextLine());
+      System.out.print("Name: ");
+      setName(in.nextLine());
 
-    System.out.print("Description: ");
-    setDescription(in.nextLine());
+      System.out.print("Description: ");
+      setDescription(in.nextLine());
 
-    System.out.print("Endurance: ");
-    setEndurance(in.nextInt());
+      System.out.print("Endurance: ");
+      setEndurance(in.nextInt());
 
-    in.nextLine();
+      in.nextLine();
+    }
   }
 
   void saveCreatureData() {
@@ -44,9 +52,16 @@ public class Creature {
     this.description = description;
   }
 
+  /**
+   * Sets the endurance of the creature.
+   * If endurance is less than zero, endurance is set to zero
+   * If endurance is zero, then the creature is said to be dead
+   * Else, creature is said to be alive and well
+   * @param endurance
+   */
   public void setEndurance(int endurance) {
     this.endurance = (endurance < 0) ? 0 : endurance;
-    Random r = new Random();
+    Random r = new Random(System.currentTimeMillis());
 
     if (this.endurance == 0) {
       String [] causeOfDeath = {
@@ -54,29 +69,30 @@ public class Creature {
         "diabetes", "heart attack"
       };
 
-      System.out.println(this.name + " died from " + causeOfDeath[r.nextInt(5)]);
+      System.out.println(this.name + " died from " + causeOfDeath[r.nextInt(causeOfDeath.length)]);
     }
 
     else if (this.endurance > 0) {
-      String [] goodStuff = {
-        " can clap with one hand", " is an alpha",
-        " can bench press 300lbs.", " is better than ever",
+      String [] healthy = {
+        " can clap with one hand", " can divide by zero",
+        " can bench press 300lbs.", " can make an onion cry",
         " can sneeze with his eyes open"
       };
 
-      System.out.println(this.name + goodStuff[r.nextInt(5)]);
+      System.out.println(this.name + healthy[r.nextInt(healthy.length)]);
     }
   }
 
   // Getters
-  public String getName() { return this.name; }
-  public String getDescription() { return this.description; }
-  public int getEndurance() { return this.endurance; }
+  public String getName()         { return name; }
+  public int getEndurance()       { return endurance; }
+  public String getDescription()  { return description; }
 
   boolean isDead() {
-    return (this.endurance > 0) ? false : true;
+    return (this.endurance <= 0) ? true : false;
   }
 
+  //
   String getRandomPhrase() {
     return "";
   }
@@ -89,19 +105,8 @@ public class Creature {
       Name: %11s
       Description: %5s  
       Endurance: %3d
-        """, 
-        this.name, this.description, this.endurance);
+      """, 
+      getName(), getDescription(), getEndurance());
   }
-
-  // This method already exists by default?
-  // String toString () {
-  //   System.out.printf(
-  //    """
-  //     Name: %s
-  //     Description: %s
-  //     Endurance: %d 
-  //        """; 
-  //   , )
-  // }
 
 }
