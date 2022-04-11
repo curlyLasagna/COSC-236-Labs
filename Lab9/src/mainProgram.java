@@ -10,6 +10,8 @@ class mainProgram {
 
   static void createCreature() {
     Creature x = new Creature();
+    System.out.println(x);
+
     int i = 0;
 
     while(i < 3) {
@@ -42,7 +44,12 @@ class mainProgram {
       )
     );
 
-    x.setName(IR4.getString("Enter " + x.getName() + "'s new name"));
+    x.setName(
+      IR4.getString(
+        "Enter " + x.getName() + "'s new name"
+      )
+    );
+
     x.saveCreatureData("creature.dat");
     
     Creature y = new Creature("creature.dat");

@@ -23,7 +23,7 @@ public class Creature {
       "Meow",
       "Nyan Nyan",
       "Rawr",
-      "Cho Cho"
+      "Cho cho"
   };
 
   /**
@@ -131,7 +131,7 @@ public class Creature {
   String getPhrase() {
     if (phraseIndex >= creaturePhrase.length) {
       phraseIndex = 0;
-      return creaturePhrase[phraseIndex];
+      return creaturePhrase[phraseIndex++];
     }
     else
       return creaturePhrase[phraseIndex++];
@@ -159,11 +159,11 @@ public class Creature {
     endurance--;
     return String.format(
         """
-            You feed %s with %s
+            You fed %s with %s
             %s is very allergic to %s. Good job!
             Current endurance: %d
             """,
-        name, name, food, food, endurance);
+        name, food, name, food, endurance);
   }
 
   @Override
@@ -171,9 +171,9 @@ public class Creature {
     return String.format(
         """
             Creature statistics
-            Name: %12s
-            Description: %5s
-            Endurance: %5d
+            Name: %s
+            Description: %s
+            Endurance: %d
             """,
         name, description, endurance);
   }
