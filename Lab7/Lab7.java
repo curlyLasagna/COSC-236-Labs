@@ -287,8 +287,8 @@ public class Lab7 {
    * @return boolean whether to continue running the program
    * @throws FileNotFoundException IOException
    */
-  static boolean menu()
-      throws FileNotFoundException, IOException {
+  static boolean menu 
+      throws FileNotFoundException, IOException () {
 
     System.out.println(miscFunc.getMenu(progNames));
     System.out.print("> ");
