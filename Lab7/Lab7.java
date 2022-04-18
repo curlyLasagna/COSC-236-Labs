@@ -17,12 +17,15 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public class Lab7 {
-  final static String[] progNames = {
+  final static String[] PROG_NAMES = {
       "Text file arithmetic",
       "Write student information",
       "Read student data"
   };
-
+  final static String 
+    INPUT_FILE = "input.txt",
+    OUTPUT_FILE = "output.txt",
+    STUDENT_FILE = "student.dat";
   static Scanner in = new Scanner(System.in);
 
   public static void main(String[] arg)
@@ -60,8 +63,7 @@ public class Lab7 {
 
       rf.close();
       write_to_file(sum, max, sum / countNum);
-      } 
-    } catch (FileNotFoundException err) {
+      } catch (FileNotFoundException err) {
       System.err.println("Cannot find " + INPUT_FILE);
       menu();
     }
@@ -94,32 +96,6 @@ public class Lab7 {
     catch (IOException err) {
         System.err.println("Cannot write to " + OUTPUT_FILE);
         menu();
-    }
-  /*
-   * Output sum, max, and average to output.txt
-   * 
-   * @param 3 double values: sum, max, avg
-   */
-  static void write_to_file(double sum, double max, double avg)
-      throws FileNotFoundException, IOException {
-    try (PrintStream out = new PrintStream(
-        new File(OUTPUT_FILE))) {
-
-      out.printf(
-          """
-              Sum: %.2f%n
-              Max: %.2f%n
-              Avg: %.2f%n
-              """,
-          sum, max, avg);
-
-      menu();
-    } catch (FileNotFoundException err) {
-      System.err.println("File does not exist");
-      menu();
-    } catch (IOException err) {
-      System.err.println("Cannot write to " + OUTPUT_FILE);
-      menu();
     }
   }
 
@@ -172,9 +148,6 @@ public class Lab7 {
       }
     }
 
-    }
-  }
-
   /**
    * Reads data from student.dat
    * @throws FileNotFoundException
@@ -215,15 +188,10 @@ public class Lab7 {
 
       student_menu(studentNames, studentGrades, yearCourseTaken);
       menu();
-      } 
-    }
-
-    catch (FileNotFoundException err) {
+      } catch (FileNotFoundException err) {
       System.err.println("Cannot find file: " + STUDENT_FILE);
       menu();
-    }
-
-    catch (IOException err) {
+      } catch (IOException err) {
       System.err.println("Unable to read " + STUDENT_FILE);
       menu();
     }
@@ -287,10 +255,10 @@ public class Lab7 {
    * @return boolean whether to continue running the program
    * @throws FileNotFoundException IOException
    */
-  static boolean menu 
-      throws FileNotFoundException, IOException () {
+  static boolean menu () 
+      throws FileNotFoundException, IOException {
 
-    System.out.println(miscFunc.getMenu(progNames));
+    System.out.println(miscFunc.getMenu(PROG_NAMES));
     System.out.print("> ");
 
     if (in.hasNextInt()) {
