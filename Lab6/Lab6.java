@@ -78,13 +78,6 @@ public class Lab6 {
       System.out.print("> ");
       String expression = in.nextLine();
 
-      // If user only enters a single value
-      if(expression.matches("-?\\.*\\d+\\.*\\d*")) {
-        singleDigit = true;
-        result = Double.parseDouble(expression);
-        break;
-      }
-
       // Check if pattern is correct (lhs op rhs)
       if (!expression.matches(pattern)) {
         System.err.println("Syntax Error");
